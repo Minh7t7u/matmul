@@ -12,9 +12,9 @@ typedef enum {
 } mat_status;
 
 /*
- * @des : a matrix is implemented using a float array with <width> and <height>;
- *        <stride> store the underlying (or the parent structs)
- *        number of column per row 
+ * @des : a matrix is implemented using a flat, row-major float array
+ *        with <width> columns and <height> rows; row <r>, column <c>
+ *        lives at data[r * width + c]
  */
 typedef struct {
     size_t width;
@@ -41,7 +41,7 @@ mat_status mat_create(matrix *mat, size_t height, size_t width);
  * @des : return the 2D representation of matrix <mat>
  *        this can then be used with indexer operator "[]"
  */
-#define index(mat) ((float (*)[(mat)->stride]) (mat)->data)
+#define index(mat) ((float (*)[(mat)->width]) (mat)->data)
 
 /*
  * @des : return the index at [<row>][<col>] in the matrix <mat>
@@ -96,17 +96,10 @@ mat_status mat_dot(const matrix *restrict mat1, const matrix *restrict mat2, mat
  */ 
 mat_status mat_scale(const matrix *restrict mat, float scalar, matrix *restrict ptr);
 
-/* 
- * @des    : format a <matrix> to a printable <string>, store the
- *           result in <ptr>
+/*
+ * @des    : free the given matrix's data buffer and NULL it out
  * @return : mat_status
- */ 
-mat_status mat_str(matrix *mat, char *ptr);
-
-/* 
- * @des    : free the given matrix's memory
- * @return : return 0 on success, -1 on failure
- */ 
-mat_status free_mat(matrix *matrix);
+ */
+mat_status mat_destroy(matrix *mat);
 
 #endif

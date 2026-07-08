@@ -99,7 +99,7 @@ mat_status mat_scale(const matrix *restrict mat, float scalar, matrix *restrict 
     return SUCCESS;
 }
 
-mat_status mat_destroy(matrix *mat, char **out) {
+mat_status mat_destroy(matrix *mat) {
     if (mat == NULL) {return ERNULL;}
     free(mat->data);
     mat->data = NULL;
